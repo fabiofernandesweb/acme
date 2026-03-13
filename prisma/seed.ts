@@ -147,7 +147,7 @@ async function main() {
 
   console.log('Dados de receita mensal criados.')
 
-  console.log('Populção concluída com sucesso.')
+  console.log('População concluída com sucesso.')
 };
 
 main()

@@ -1,4 +1,4 @@
-import {PrismaClient, InvoiceStatus} from '@prisma/client';
+import { PrismaClient, InvoiceStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -23,19 +23,19 @@ async function main() {
   const customer_data = [{
     name: 'Fabio Fernandes',
     email: 'fabio@email.com',
-    imageUrl: 'https://ui-avatars.com/api/?nome:Fabio+Fernandes&background=random'
+    imageUrl: 'https://ui-avatars.com/api/?name:Fabio+Fernandes&background=random'
   }, {
     name: 'Adriana Fernandes',
     email: 'adriana@email.com',
-    imageUrl: 'https://ui-avatars.com/api/?nome:Adriana+Fernandes&background=random'
+    imageUrl: 'https://ui-avatars.com/api/?name:Adriana+Fernandes&background=random'
   }, {
     name: 'Livia Fernandes',
     email: 'livia@email.com',
-    imageUrl: 'https://ui-avatars.com/api/?nome:Livia+Fernandes&background=random'
-  }]; 
+    imageUrl: 'https://ui-avatars.com/api/?name:Livia+Fernandes&background=random'
+  }];
 
   const customers = [];
-  
+
   for (const data of customer_data) {
     const customer = await prisma.customer.upsert({
       where: { email: data.email },
@@ -114,7 +114,7 @@ async function main() {
       data: {
         amount: data.amount,
         status: data.status,
-        date:new Date(data.date),
+        date: new Date(data.date),
         customerId: data.customer.id
       }
     });
@@ -122,48 +122,39 @@ async function main() {
 
   console.log(`$(invoicesData.length) faturas criadas.`);
 
-  const revenueData = [{
-    month: 'Jan',
-    revenue: 151554
-  }, {
-    month: 'Fev',
-    revenue: 567386
-  }, {
-    month: 'Mar',
-    revenue: 354286
-  }, {
-    month: 'Abr',
-    revenue: 198234
-  }, {
-    month: 'Mai',
-    revenue: 123456
-  }, {
-    month: 'Jun',
-    revenue: 987654
-  }, {
-    month: 'Jul',
-    revenue: 654321
-  }, {
-    month: 'Ago',
-    revenue: 678908
-  }, {
-    month: 'Set',
-    revenue: 148904
-  }, {
-    month: 'Out',
-    revenue: 151554
-  }, {
-    month: 'Nov',
-    revenue: 328499
-  }, {
-    month: 'Dez',
-    revenue: 391563
-  }];
+  const revenueData = [
+    { month: 'Jan', revenue: 15155461 },
+    { month: 'Fev', revenue: 45155461 },
+    { month: 'Mar', revenue: 67479281 },
+    { month: 'Abr', revenue: 98765940 },
+    { month: 'Mai', revenue: 45687698 },
+    { month: 'Jun', revenue: 97865743 },
+    { month: 'Jul', revenue: 27619846 },
+    { month: 'Ago', revenue: 45399299 },
+    { month: 'Set', revenue: 99974777 },
+    { month: 'Out', revenue: 77546351 },
+    { month: 'Nov', revenue: 43255657 },
+    { month: 'Dez', revenue: 58856754 },
+  ];
 
   for (const data of revenueData) {
-    await prisma.revenue.update({
+    await prisma.revenue.upsert({
       where: { month: data.month },
-
+      update: { revenue: data.revenue },
+      create: data
     });
-  }
+  };
+
+  console.log('Dados de receita mensal criados.')
+
+  console.log('Populção concluída com sucesso.')
 };
+
+main()
+  .catch((erro) => {
+    console.log('Erro ao popular o banco:', erro);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+

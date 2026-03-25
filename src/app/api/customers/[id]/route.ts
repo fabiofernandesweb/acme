@@ -6,7 +6,7 @@ type RouteParams = {
   params: { id: string }
 };
 
-export async function GET({ params }: RouteParams) {
+export async function GET(request: NextRequest, { params }: RouteParams) {
   const { id } = await params;
 
   const result = await CustomerController.getById(id);
@@ -24,7 +24,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   return NextResponse.json(result.body, { status: result.status });
 };
 
-export async function DELETE({ params }: RouteParams) {
+export async function DELETE(request: NextRequest, { params }: RouteParams) {
   const { id } = await params;
 
   const result = await CustomerController.remove(id);

@@ -6,7 +6,8 @@ import {
   updateCustomer,
   deleteCustomer
 } from '@/services/CustomerService';
-import { ApiError} from '@/types';
+import { ApiError, SortOrder} from '@/types';
+import { string } from 'zod/v4';
 
 export const CreateCustomerSchema = z.object({
   name: z
@@ -41,6 +42,10 @@ function buildErrorResponse(
 export const CustomerController = {
   async getAll(searchParams: URLSearchParams) {
     const search = searchParams.get('search') ?? undefined;
+    const page = Number(searchParams.get('page')) || 1;
+    const limit = Number(searchParams.get('limit')) || 10;
+    const sortBy = searchParams.get('sortBy') ?? 'name';
+    const order = (searchParams.get('order') as SortOrder) ?? 'asc';
 
     const customer = await findAllCustomers({ search });
 

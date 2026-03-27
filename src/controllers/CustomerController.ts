@@ -47,7 +47,13 @@ export const CustomerController = {
     const sortBy = searchParams.get('sortBy') ?? 'name';
     const order = (searchParams.get('order') as SortOrder) ?? 'asc';
 
-    const customer = await findAllCustomers({ search });
+    const customer = await findAllCustomers({ 
+      search,
+      page,
+      limit,
+      sortBy,
+      order 
+    });
 
     return { status: 200, body: customer };
   },

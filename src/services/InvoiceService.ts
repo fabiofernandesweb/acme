@@ -30,7 +30,7 @@ export async function findAllInvoices(
     }
   } : undefined;
 
-  const [invoice, total] = await Promise.all([
+  const [invoices, total] = await Promise.all([
     prisma.invoice.findMany({
       where,
       include: {
@@ -41,7 +41,10 @@ export async function findAllInvoices(
             imageUrl: true
           }
         }
-      }
+      },
+      orderBy: { date: order },
+      take: safeLimit,
+      skip
     }),
     prisma.invoice.count({ where })
   ]);
@@ -49,7 +52,7 @@ export async function findAllInvoices(
   const totalPages = Math.ceil(total / safeLimit);
 
   return {
-    data: invoice,
+    data: invoices,
     meta: {
       total,
       page: safePage,

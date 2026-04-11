@@ -14,7 +14,11 @@ export async function findAllInvoices(
     search,
     page = 1,
     limit = 10,
-    order = 'desc'
+    order = 'desc',
+    status,
+    customerId,
+    dateFrom,
+    dateTo
   } = params;
 
   const safePage = Math.max(1, page);

@@ -52,7 +52,7 @@ export interface FindAllInvoiceParams {
   limit?: number;
   order?: SortOrder;
   status?: InvoiceStatus;
-  customerId: string;
+  customerId?: string;
   dateFrom?: string;
   dateTo?: string;
 };

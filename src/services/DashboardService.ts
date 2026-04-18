@@ -26,6 +26,12 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
     })
   ]);
 
+  const MONTH_ORDER = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+
+  const sortedRevenue = [...revenue].sort(
+    (a, b) => MONTH_ORDER.indexOf(a.month) - MONTH_ORDER.indexOf(b.month)
+  );
+
   return {
     customerCount,
     invoiceCount,
@@ -33,6 +39,6 @@ export async function getDashboardMetrics(): Promise<DashboardMetrics> {
     totalPago: pago._sum.amount ?? 0,
     countPendente: pendente._count.id,
     countPago: pago._count.id,
-    revenue
+    revenue: sortedRevenue
   };
 };
